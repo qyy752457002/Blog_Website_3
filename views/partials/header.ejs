@@ -12,6 +12,19 @@
       <li>
         <a href="/contact" class="<%= isActiveRoute('/contact', currentRoute) %>">Contact</a>
       </li>
+
+      <% if (isLoggedIn) { %>
+        <li>
+          <a href="/dashboard" class="<%= isActiveRoute('/dashboard', currentRoute) %>">Dashboard</a>
+        </li>
+        <li>
+          <a href="/logout" class="<%= isActiveRoute('/logout', currentRoute) %>">Logout</a>
+        </li>
+      <% } else { %>
+        <li>
+          <a href="/admin" class="<%= isActiveRoute('/admin', currentRoute) %>">Login</a>
+        </li>
+      <% } %>
     </ul>
 
   </nav>

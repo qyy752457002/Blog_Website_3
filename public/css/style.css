@@ -338,3 +338,25 @@ img {
 .pagination:hover {
   color: var(--black);
 }
+
+.btn {
+  width: 120px;      /* 定义按钮的宽度 */
+  height: 40px;      /* 定义按钮的高度 */
+  padding: 10px;     /* 设置内边距 */
+  font-size: 16px;   /* 设置文字大小 */
+  text-align: center; /* 文字居中 */
+  border: none;      /* 无边框 */
+  background-color: #4CAF50; /* 背景颜色 */
+  color: white;      /* 文字颜色 */
+  cursor: pointer;   /* 鼠标悬停时的指针样式 */
+  border-radius: 5px; /* 边角圆滑 */
+}
+
+.button {
+  display: flex;
+  justify-content:last baseline; 
+  margin-bottom: 10px; /* 底部边距 */
+}
+
+
+

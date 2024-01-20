@@ -17,9 +17,11 @@
   </nav>
 
   <div class="header__button">
-    <a href="/logout">
-      Logout
-    </a>
+    <% if (isLoggedIn) { %>
+      <a href="/logout">
+        Logout
+      </a>
+    <% } %>
   </div>
 
 </header>

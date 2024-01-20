@@ -1,21 +1,28 @@
 const express = require('express');
-const router = express.Router();
 const Post = require('../models/Post');
+const router = express.Router();
 
 /**
  * GET /
  * HOME
 */
-router.get('', async (req, res) => {
+router.get('/', async (req, res) => {
+  const token = req.cookies.token;
+  const isLoggedIn = token ? true : false;
+
   try {
     const locals = {
       title: "NodeJs Blog",
       description: "Simple Blog created with NodeJs, Express & MongoDb."
     }
 
+    // 设置 每页的 post 数量
     let perPage = 10;
+    // 获取当前的page
     let page = req.query.page || 1;
 
+    // 用于从Post集合中获取数据，进行降序排序，然后实现分页功能
+    // 这在网站或应用中实现文章列表、博客帖子、论坛帖子等的分页显示时非常常见
     const data = await Post.aggregate([ { $sort: { createdAt: -1 } } ])
     .skip(perPage * page - perPage)
     .limit(perPage)
@@ -23,7 +30,9 @@ router.get('', async (req, res) => {
 
     // Count is deprecated - please use countDocuments
     // const count = await Post.count();
+    // 获取 Post 集合 中 文档数量
     const count = await Post.countDocuments({});
+    // 获取下一页的 page
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
 
@@ -32,6 +41,7 @@ router.get('', async (req, res) => {
       data,
       current: page,
       nextPage: hasNextPage ? nextPage : null,
+      isLoggedIn: isLoggedIn,
       currentRoute: '/'
     });
 
@@ -41,30 +51,18 @@ router.get('', async (req, res) => {
 
 });
 
-// router.get('', async (req, res) => {
-//   const locals = {
-//     title: "NodeJs Blog",
-//     description: "Simple Blog created with NodeJs, Express & MongoDb."
-//   }
-
-//   try {
-//     const data = await Post.find();
-//     res.render('index', { locals, data });
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-// });
-
-
 /**
  * GET /
  * Post :id
 */
 router.get('/post/:id', async (req, res) => {
+  const token = req.cookies.token;
+  const isLoggedIn = token ? true : false;
+
   try {
     let slug = req.params.id;
 
+    // 根据 post id 获取 post
     const data = await Post.findById({ _id: slug });
 
     const locals = {
@@ -75,6 +73,7 @@ router.get('/post/:id', async (req, res) => {
     res.render('post', { 
       locals,
       data,
+      isLoggedIn: isLoggedIn,
       currentRoute: `/post/${slug}`
     });
   } catch (error) {
@@ -89,6 +88,9 @@ router.get('/post/:id', async (req, res) => {
  * Post - searchTerm
 */
 router.post('/search', async (req, res) => {
+  const token = req.cookies.token;
+  const isLoggedIn = token ? true : false;
+
   try {
     const locals = {
       title: "Seach",
@@ -108,6 +110,7 @@ router.post('/search', async (req, res) => {
     res.render("search", {
       data,
       locals,
+      isLoggedIn: isLoggedIn,
       currentRoute: '/'
     });
 
@@ -123,8 +126,22 @@ router.post('/search', async (req, res) => {
  * About
 */
 router.get('/about', (req, res) => {
+  const token = req.cookies.token;
+  const isLoggedIn = token ? true : false;
+
   res.render('about', {
+    isLoggedIn: isLoggedIn,
     currentRoute: '/about'
+  });
+});
+
+router.get('/contact', (req, res) => {
+  const token = req.cookies.token;
+  const isLoggedIn = token ? true : false;
+  
+  res.render('contact', {
+    isLoggedIn: isLoggedIn,
+    currentRoute: '/contact'
   });
 });
 
@@ -175,6 +192,5 @@ router.get('/about', (req, res) => {
 // }
 
 // insertPostData();
-
 
 module.exports = router;
