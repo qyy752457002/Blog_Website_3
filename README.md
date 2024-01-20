@@ -11,8 +11,8 @@
 Create a .env file to store your credentials. Example below:
 
 ```
-MONGODB_URI=mongodb+srv://<username>:<password>@clusterName.xxxxxxx.mongodb.net/blog
-JWT_SECRET=MySecretBlog
+mongodb+srv://Krismile:Qyy2614102@todolistcluster.dalyaca.mongodb.net/BlogDB_2
+JWT_SECRET = 123456
 ```
 
 ## Installation
